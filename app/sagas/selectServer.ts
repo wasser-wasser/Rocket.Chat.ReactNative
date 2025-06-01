@@ -46,6 +46,8 @@ import { connect, disconnect } from '../lib/services/connect';
 import { appSelector } from '../lib/hooks';
 import { getServerById } from '../lib/database/services/Server';
 import { getLoggedUserById } from '../lib/database/services/LoggedUser';
+import UnifiedPush from '../lib/notifications/UnifiedPush'
+
 
 const getServerVersion = function (version: string | null) {
 	let validVersion = valid(version);
@@ -140,6 +142,26 @@ const getServerInfoSaga = function* getServerInfoSaga({ server, raiseError = tru
 	}
 };
 
+const handleUnifiedPushRegister = async (UPmessage: string) => {
+	try {
+		const result = await UnifiedPush.registerAppWithId(UPmessage);
+		UserPreferences.setBool('UNIFIEDPUSH_REGISTEREED', true);
+		return result;
+	} catch (err) {
+		console.error('RegistrationFailed', err);
+		UserPreferences.setBool('UNIFIEDPUSH_REGISTEREED', false);
+	}
+	return false;
+};
+// const handleGetMessage = async () => {
+// 	try {
+// 		const message = await UnifiedPush.getCachedNotification();
+// 		console.log('Cached message UP from TS:', message);
+// 	} catch (err) {
+// 		console.error('Failed to get cached notification', err);
+// 	}
+// };
+
 const handleSelectServer = function* handleSelectServer({ server, version, fetchVersion }: ISelectServerAction) {
 	try {
 		// SSL Pinning - Read certificate alias and set it to be used by network requests
@@ -170,6 +192,9 @@ const handleSelectServer = function* handleSelectServer({ server, version, fetch
 					nickname: userRecord.nickname,
 					requirePasswordChange: userRecord.requirePasswordChange
 				};
+				// UNIFIEDPUSH-Abonnement hier starten --
+				// Push-Benachrichtigungen anmelden
+				handleUnifiedPushRegister(`rocket_chat~${userRecord.id}~${userRecord.token}`)
 			} else {
 				const token = UserPreferences.getString(`${TOKEN_KEY}-${userId}`);
 				if (token) {
@@ -214,7 +239,7 @@ const handleSelectServer = function* handleSelectServer({ server, version, fetch
 		const serverVersion = serverInfo?.version || version;
 
 		// we'll set serverVersion as metadata for bugsnag
-		logServerVersion(serverVersion);
+		// logServerVersion(serverVersion);
 		yield put(selectServerSuccess({ server, version: serverVersion, name: serverInfo?.name || 'Rocket.Chat' }));
 	} catch (e) {
 		yield put(selectServerFailure());

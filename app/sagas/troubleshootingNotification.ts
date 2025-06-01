@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 import { call, takeLatest, put } from 'typed-redux-saga';
-import notifee, { AuthorizationStatus } from '@notifee/react-native';
+// import notifee, { AuthorizationStatus } from '@notifee/react-native';
 
 import { TROUBLESHOOTING_NOTIFICATION } from '../actions/actionsTypes';
 import { setTroubleshootingNotification } from '../actions/troubleshootingNotification';
@@ -19,8 +19,9 @@ function* init() {
 	let defaultPushGateway = false;
 	let pushGatewayEnabled = false;
 	try {
-		const { authorizationStatus } = yield* call(notifee.getNotificationSettings);
-		deviceNotificationEnabled = authorizationStatus > AuthorizationStatus.DENIED;
+		// const { authorizationStatus } = yield* call(notifee.getNotificationSettings);
+		// deviceNotificationEnabled = authorizationStatus > AuthorizationStatus.DENIED;
+		console.log(`TODO add check if NOTIFICATION link connected here ... if so set "deviceNotificationEnabled = true;"`)
 	} catch (e) {
 		log(e);
 	}

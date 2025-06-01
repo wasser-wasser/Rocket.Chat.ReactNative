@@ -1,4 +1,5 @@
-package chat.rocket.reactnative
+package fdroid_up.rocket.reactnative
+
  
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
@@ -9,6 +10,8 @@ import android.os.Bundle
 import com.zoontek.rnbootsplash.RNBootSplash
 import android.content.Intent;
 import android.content.res.Configuration;
+
+// import org.unifiedpush.android.connector.UnifiedPush:
  
 class MainActivity : ReactActivity() {
  

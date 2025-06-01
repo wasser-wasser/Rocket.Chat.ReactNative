@@ -37,6 +37,9 @@ import ChangePasscodeView from './views/ChangePasscodeView';
 import ScreenLockedView from './views/ScreenLockedView';
 import { RowHeightProvider } from './lib/hooks/useRowHeight';
 
+// import UnifiedPush from './lib/notifications/UnifiedPush'
+import PushViewHandler from './lib/notifications/PushViewHandler'; // adjust path as needed
+
 enableScreens();
 initStore(store);
 
@@ -86,7 +89,6 @@ export default class Root extends React.Component<{}, IState> {
 	constructor(props: any) {
 		super(props);
 		this.init();
-		this.initCrashReport();
 		const { width, height, scale, fontScale } = Dimensions.get('window');
 		const theme = initialTheme();
 		this.state = {
@@ -131,6 +133,7 @@ export default class Root extends React.Component<{}, IState> {
 			if ('configured' in notification) {
 				return;
 			}
+			console.log('chat,rocket.reactnative  onNotification  notification')
 			onNotification(notification);
 			return;
 		}
@@ -147,7 +150,7 @@ export default class Root extends React.Component<{}, IState> {
 
 		// Open app from app icon
 		store.dispatch(appInit());
-	};
+	}; 
 
 	getMasterDetail = (width: number) => {
 		if (!isTablet) {
@@ -193,14 +196,14 @@ export default class Root extends React.Component<{}, IState> {
 		this.setMasterDetail(width);
 	};
 
-	initCrashReport = () => {
-		getAllowCrashReport().then(allowCrashReport => {
-			toggleCrashErrorsReport(allowCrashReport);
-		});
-		getAllowAnalyticsEvents().then(allowAnalyticsEvents => {
-			toggleAnalyticsEventsReport(allowAnalyticsEvents);
-		});
-	};
+	// initCrashReport = () => {
+	// 	getAllowCrashReport().then(allowCrashReport => {
+	// 		toggleCrashErrorsReport(allowCrashReport);
+	// 	});
+	// 	getAllowAnalyticsEvents().then(allowAnalyticsEvents => {
+	// 		toggleAnalyticsEventsReport(allowAnalyticsEvents);
+	// 	});
+	// };
 
 	render() {
 		const { themePreferences, theme, width, height, scale, fontScale } = this.state;
@@ -237,6 +240,7 @@ export default class Root extends React.Component<{}, IState> {
 							</DimensionsContext.Provider>
 						</RowHeightProvider>
 					</ThemeContext.Provider>
+					<PushViewHandler />
 				</Provider>
 			</SafeAreaProvider>
 		);

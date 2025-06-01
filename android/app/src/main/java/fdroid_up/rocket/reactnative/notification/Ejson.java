@@ -1,4 +1,4 @@
-package chat.rocket.reactnative.notification;
+package fdroid_up.rocket.reactnative.notification;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.Callback;
