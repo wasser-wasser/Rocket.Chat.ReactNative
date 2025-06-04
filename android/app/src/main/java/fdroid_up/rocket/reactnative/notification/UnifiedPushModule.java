@@ -18,6 +18,9 @@ import org.unifiedpush.android.connector.UnifiedPush;
 // import static org.unifiedpush.android.connector.ConstantsKt;
 import static org.unifiedpush.android.connector.ConstantsKt.INSTANCE_DEFAULT;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
+
 import org.unifiedpush.android.connector.keys.DefaultKeyManager;
 import fdroid_up.rocket.reactnative.notification.CustomPushNotification;
 
@@ -39,6 +42,15 @@ public class UnifiedPushModule extends ReactContextBaseJavaModule {
     public void markJSReady() {
         CustomPushNotification.notifyJSReady();
         this.initialize();
+    }
+
+    @ReactMethod
+    public void sendNotification(String ntfy_url) {
+        WritableMap payload = Arguments.createMap();
+        String jsonBody = String.format("{\"UP_REGISTER\":\"UP_REGISTER\", \"ntfy_url\":\"%s\"}", 
+        ntfy_url);
+        payload.putString("message", jsonBody);
+        CustomPushNotification.sendPushToJs(payload);
     }
 
     public UnifiedPushModule(ReactApplicationContext reactContext) {

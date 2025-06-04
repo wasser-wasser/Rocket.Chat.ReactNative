@@ -67,6 +67,7 @@ const App = memo(({ root, isMasterDetail }: { root: string; isMasterDetail: bool
 				}
 				Navigation.routeNameRef.current = currentRouteName;
 			}}>
+			<PushViewHandler />
 			<Stack.Navigator screenOptions={{ headerShown: false, animation: 'none', navigationBarColor: themes[theme].surfaceLight }}>
 				{root === RootEnum.ROOT_LOADING || root === RootEnum.ROOT_LOADING_SHARE_EXTENSION ? (
 					<Stack.Screen name='AuthLoading' component={AuthLoadingView} />
@@ -81,7 +82,6 @@ const App = memo(({ root, isMasterDetail }: { root: string; isMasterDetail: bool
 					<Stack.Screen name='ShareExtensionStack' component={ShareExtensionStack} />
 				) : null}
 			</Stack.Navigator>
-		   <PushViewHandler />
 		</NavigationContainer>
 	);
 });

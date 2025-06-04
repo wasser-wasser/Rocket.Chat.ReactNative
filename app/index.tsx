@@ -37,9 +37,6 @@ import ChangePasscodeView from './views/ChangePasscodeView';
 import ScreenLockedView from './views/ScreenLockedView';
 import { RowHeightProvider } from './lib/hooks/useRowHeight';
 
-// import UnifiedPush from './lib/notifications/UnifiedPush'
-import PushViewHandler from './lib/notifications/PushViewHandler'; // adjust path as needed
-
 enableScreens();
 initStore(store);
 
@@ -240,7 +237,6 @@ export default class Root extends React.Component<{}, IState> {
 							</DimensionsContext.Provider>
 						</RowHeightProvider>
 					</ThemeContext.Provider>
-					<PushViewHandler />
 				</Provider>
 			</SafeAreaProvider>
 		);

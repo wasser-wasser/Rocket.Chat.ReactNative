@@ -131,20 +131,17 @@ public class CustomPushNotification {
 
     public void handleNotification() {
         Bundle bundle = this.mNotificationData;
-        Log.w(MODULE_NAME, "handleNotification bundle:"+bundle.getString("title"));
-        Log.w(MODULE_NAME, "handleNotification ejsonejson:"+bundle.getString("ejson"));
-        Log.w(MODULE_NAME, "handleNotification registeration:"+bundle.getString("registration"));
-
-        if ("True".equals(bundle.getString("registration"))) {
-            Log.w(MODULE_NAME, "registration-registration --> :"+bundle.getString("register_ntfy"));
-            String registration_url = bundle.getString("register_ntfy");
-            // change to use a new endpoint on rc_server
-            // SharedPreferences prefs = reactContext.getSharedPreferences("UnifiedPushPrefs", Context.MODE_PRIVATE);
-            // prefs.getString("rc_server", null); 
+        // Hat der Benachrichtigungsserver zusätzliche Authentifizierung angefordert, z.B. für das Weiterleiten von Nachrichten vom Server?
+        if ("UP_REGISTER".equals(bundle.getString("UP_REGISTER"))) {
+            String registration_url = bundle.getString("ntfy_url","");
+            if (registration_url.length() < 9){
+                return;
+            }
             WritableMap payload = Arguments.createMap();
-            payload.putString("message",bundleToString(this.mNotificationData));
+            String jsonBody = String.format("{\"UP_REGISTER\":\"UP_REGISTER\", \"ntfy_url\":\"%s\"}", 
+            bundle.getString("ntfy_url"));
+            payload.putString("message",jsonBody);
             sendPushToJs(payload);
-            return;
         }
 
         // Ejson loadedEjson = new Gson().fromJson(bundle.getString("ejson", "{}"), Ejson.class);
@@ -157,7 +154,7 @@ public class CustomPushNotification {
 
         // get message if not present
         if (loadedEjson.notificationType != null && loadedEjson.notificationType.equals("message-id-only")) {
-            // we need the folloing KEYS:
+            // KEYS:
             //     userId
             //     token
             //     messageId

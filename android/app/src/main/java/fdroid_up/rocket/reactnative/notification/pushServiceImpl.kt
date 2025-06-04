@@ -59,13 +59,13 @@ class PushServiceImpl : PushService() {
         payload.putString("action", action)
         Log.d(TAG, "sendPushEvent $action $data")
 
-        // This is only needed if using EXPO
-        val module = _module
-        if (module != null) {
-            module.sendEvent("message", payload)
-        } else {
-            Log.e(TAG, "sendPushEvent called without a reference to the expo module")
-        }
+        // if EXPO
+        // val module = _module
+        // if (module != null) {
+        //     module.sendEvent("message", payload)
+        // } else {
+        //     Log.e(TAG, "sendPushEvent called without a reference to the expo module")
+        // }
     }
 
     private fun sendErrorEvent(err: Throwable) {

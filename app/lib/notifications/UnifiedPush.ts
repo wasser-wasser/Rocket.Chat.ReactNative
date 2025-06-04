@@ -5,20 +5,24 @@ const { UnifiedPush } = NativeModules;
 const notifyEmitter = new NativeEventEmitter(UnifiedPush);
 
 
+interface PushNotificationEvent {
+  message: string;
+}
+
 type UnifiedPushType = {
   getCachedNotification: () => Promise<string | null>;
   registerApp: () => Promise<string>;
   registerAppWithId: (appId: string) => Promise<string>;
   sendRegistration: (url: string, userId: string, userToken: string) => Promise<string>;
   markJSReady: () => void;
+  sendNotification: (appId: string) => void;
   // initialize: () => void;
 };
 
 
-notifyEmitter.addListener("onNotification", (event) => {
-  Alert.alert('onNotification   1 '+JSON.stringify(event));
-  console.log("Received native UnifiedPushType event:", event);
-});
+// notifyEmitter.addListener("onNotification", (event: PushNotificationEvent) => {
+//  //
+// });
 
 // push?.payload.ejson   --- const { rid, name, sender, type, host, messageId }: IEjson = EJSON.parse(notification.ejson);
 

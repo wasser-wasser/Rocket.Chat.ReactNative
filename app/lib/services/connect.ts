@@ -293,19 +293,14 @@ const handleUnifiedPushRegister = async (user: string, token: string, server: st
 	try {
 		log(`rocket.chat registered UP fro TS handleUnifiedPushRegister (connect): ${server}`);
 		result = await UnifiedPush.registerApp(); 
-
-		// Somewhere early in app startup:
 		UnifiedPush.markJSReady();
-		
 		UserPreferences.setBool('UNIFIEDPUSH_REGISTEREED', true);
 		UnifiedPush.sendRegistration(server, user, token).then( (res)=>{
-			// check if notification authentication is needed
 			const json_resp = JSON.parse(res);
+			// Sollen wir hier die Authentifizierungs-Benutzeroberfläche mit UP auslösen?
 			if (json_resp.hasOwnProperty('authenticated') && json_resp['authenticated'] === false){
-				Alert.alert(`notification authentication is needed - ${server}/up-proxy/authenticate`);
 				const url = `${server}/up-proxy/authenticate`
-				// Navigation.navigate('AuthenticationWebView', { url:url});
-				// Navigation.navigate('AuthenticationWebView', { url: server, authType: 'iframe' });
+				// UnifiedPush.sendNotification(url);
 			}
 		});
 	} catch (err) {
