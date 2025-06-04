@@ -20,6 +20,9 @@ import { setCurrentScreen } from './lib/methods/helpers/log';
 import { themes } from './lib/constants';
 import { emitter } from './lib/methods/helpers';
 
+// import { PushViewHandler } from './lib/notifications/PushViewHandler'
+import PushViewHandler from './lib/notifications/PushViewHandler'; // ✅ No curly braces
+
 const createStackNavigator = createNativeStackNavigator;
 
 // SetUsernameStack
@@ -78,6 +81,7 @@ const App = memo(({ root, isMasterDetail }: { root: string; isMasterDetail: bool
 					<Stack.Screen name='ShareExtensionStack' component={ShareExtensionStack} />
 				) : null}
 			</Stack.Navigator>
+		   <PushViewHandler />
 		</NavigationContainer>
 	);
 });

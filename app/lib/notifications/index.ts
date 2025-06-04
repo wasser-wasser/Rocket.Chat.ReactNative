@@ -4,7 +4,7 @@ import { appInit } from '../../actions/app';
 import { deepLinkingClickCallPush, deepLinkingOpen } from '../../actions/deepLinking';
 import { INotification, SubscriptionType } from '../../definitions';
 import { store } from '../store/auxStore';
-import { deviceToken, pushNotificationConfigure, removeAllNotifications, setNotificationsBadgeCount } from './push';
+import { deviceToken, pushNotificationConfigure, removeAllNotifications } from './push';
 
 interface IEjson {
 	rid: string;
@@ -58,12 +58,13 @@ export const onNotification = (push: INotification): void => {
 };
 
 export const getDeviceToken = (): string => deviceToken;
-export const setBadgeCount = (count?: number): void => setNotificationsBadgeCount(count);
+// export const setBadgeCount = (count?: number): void => setNotificationsBadgeCount(count);
 export const removeNotificationsAndBadge = () => {
 	removeAllNotifications();
-	setBadgeCount();
+	// setBadgeCount();
 };
 export const initializePushNotifications = (): Promise<INotification | { configured: boolean }> | undefined => {
-	setBadgeCount();
+	// setBadgeCount();
+	console.log('rocket.chat  initializePushNotifications');
 	return pushNotificationConfigure(onNotification);
 };

@@ -1,100 +1,60 @@
-import {
-	Notifications,
-	Registered,
-	RegistrationError,
-	NotificationCompletion,
-	Notification,
-	NotificationAction,
-	NotificationCategory
-} from 'react-native-notifications';
-import { PermissionsAndroid, Platform } from 'react-native';
-
-import { INotification } from '../../definitions';
-import { isIOS } from '../methods/helpers';
+import { Platform, PermissionsAndroid } from 'react-native';
+// import { initUnifiedPush } from 'react-native-unifiedpush-connector';
 import { store as reduxStore } from '../store/auxStore';
-import I18n from '../../i18n';
-
+import { INotification } from '../../definitions';
+import React from 'react';
+import { DeviceEventEmitter } from 'react-native';
 export let deviceToken = '';
 
-export const setNotificationsBadgeCount = (count = 0): void => {
-	if (isIOS) {
-		Notifications.ios.setBadgeCount(count);
-	}
-};
-
 export const removeAllNotifications = (): void => {
-	Notifications.removeAllDeliveredNotifications();
+	// Notifications.removeAllDeliveredNotifications();
+  console.log(`app/lib/notifications/push.ts  removeAllNotifications() fired`)
 };
 
-let configured = false;
+export const pushNotificationConfigure = async (
+  onNotification: (notification: INotification) => void
+): Promise<void> => {
+  if (Platform.OS === 'android') {
+    const permission = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+    );
 
-export const pushNotificationConfigure = (onNotification: (notification: INotification) => void): Promise<any> => {
-	if (configured) {
-		return Promise.resolve({ configured: true });
-	}
+    if (permission !== PermissionsAndroid.RESULTS.GRANTED) {
+      console.warn('Notification permission not granted');
+      return;
+    }
+  }
 
-	configured = true;
+  try {
+    // const headers = {
+    //       'Content-Type': 'application/json',
+    //       'X-Auth-Token': token,
+    //       'X-User-Id': id
+    //     };
+    // const register_resp = await fetch(`${server}/register`, {
+		// 	method: 'POST',
+		// 	headers: headers,
+		// 	body: JSON.stringify({})
+		// });
+    // console.log(register_resp);
 
-	if (isIOS) {
-		// init
-		Notifications.ios.registerRemoteNotifications();
-
-		const notificationAction = new NotificationAction('REPLY_ACTION', 'background', I18n.t('Reply'), true, {
-			buttonTitle: I18n.t('Reply'),
-			placeholder: I18n.t('Type_message')
-		});
-		const acceptAction = new NotificationAction('ACCEPT_ACTION', 'foreground', I18n.t('accept'), true);
-		const rejectAction = new NotificationAction('DECLINE_ACTION', 'foreground', I18n.t('decline'), true);
-
-		const notificationCategory = new NotificationCategory('MESSAGE', [notificationAction]);
-		const videoConfCategory = new NotificationCategory('VIDEOCONF', [acceptAction, rejectAction]);
-
-		Notifications.setCategories([videoConfCategory, notificationCategory]);
-	} else if (Platform.OS === 'android' && Platform.constants.Version >= 33) {
-		// @ts-ignore
-		PermissionsAndroid.request('android.permission.POST_NOTIFICATIONS').then(permissionStatus => {
-			if (permissionStatus === 'granted') {
-				Notifications.registerRemoteNotifications();
-			} else {
-				// TODO: Ask user to enable notifications
-			}
-		});
-	} else {
-		Notifications.registerRemoteNotifications();
-	}
-
-	Notifications.events().registerRemoteNotificationsRegistered((event: Registered) => {
-		deviceToken = event.deviceToken;
-	});
-
-	Notifications.events().registerRemoteNotificationsRegistrationFailed((event: RegistrationError) => {
-		// TODO: Handle error
-		console.log(event);
-	});
-
-	Notifications.events().registerNotificationReceivedForeground(
-		(notification: Notification, completion: (response: NotificationCompletion) => void) => {
-			completion({ alert: false, sound: false, badge: false });
-		}
-	);
-
-	Notifications.events().registerNotificationOpened((notification: Notification, completion: () => void) => {
-		if (isIOS) {
-			const { background } = reduxStore.getState().app;
-			if (background) {
-				onNotification(notification);
-			}
-		} else {
-			onNotification(notification);
-		}
-		completion();
-	});
-
-	Notifications.events().registerNotificationReceivedBackground(
-		(notification: Notification, completion: (response: any) => void) => {
-			completion({ alert: true, sound: true, badge: false });
-		}
-	);
-
-	return Notifications.getInitialNotification();
+    // await initUnifiedPush({
+    //   onMessage: (message: string) => {
+    //     const notification: INotification = JSON.parse(message);
+    //     onNotification(notification);
+    //   },
+    //   onRegistration: (endpoint: string) => {
+    //     console.log('UnifiedPush registered with endpoint:', endpoint);
+    //     // You can send this endpoint to your server if needed
+    //   },
+    //   onUnregistered: () => {
+    //     console.log('UnifiedPush unregistered');
+    //   },
+    //   onRegistrationFailed: (error: string) => {
+    //     console.error('UnifiedPush registration failed:', error);
+    //   },
+    // });
+  } catch (error) {
+    console.error('Error initializing UnifiedPush:', error);
+  }
 };
