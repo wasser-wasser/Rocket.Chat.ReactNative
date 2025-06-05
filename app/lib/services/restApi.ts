@@ -1,3 +1,4 @@
+import UnifiedPush from '../notifications/UnifiedPush';
 import {
 	IAvatarSuggestion,
 	IMessage,
@@ -983,6 +984,18 @@ export const removePushToken = (): Promise<boolean | void> => {
 	}
 	return Promise.resolve();
 };
+
+
+export const removeUnifiedPushTopic = (): Promise<boolean | void> => {
+	try {
+		const { login, server } = reduxStore.getState();
+		if ((login.user._id) && (login.user.token)){
+			UnifiedPush.removeRegistration(server.server, login.user._id, login.user.token);
+		}
+	} catch (error) {}
+	return Promise.resolve();
+};
+
 
 // RC 6.6.0
 export const pushTest = () => sdk.post('push.test');

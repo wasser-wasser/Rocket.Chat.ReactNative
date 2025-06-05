@@ -119,9 +119,17 @@ export async function logout({ server }: { server: string }): Promise<void> {
 
 	try {
 		await Services.removePushToken();
+
 	} catch (e) {
 		log(e);
 	}
+
+	try {
+		await Services.removeUnifiedPushTopic();
+	} catch (e) {
+		log(e);
+	}
+	
 
 	try {
 		// RC 0.60.0

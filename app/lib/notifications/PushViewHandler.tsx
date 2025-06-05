@@ -13,6 +13,7 @@ const TARGET_SUBSTRING = 'UP_REGISTER'; // <-- adjust this to your trigger keywo
 const PushViewHandler = () => {
   const [showWebView, setShowWebView] = useState(false);
   const [webViewUrl, setWebViewUrl] = useState<string | null>(null);
+  const [webViewStyle, setWebViewStyle] = useState<string | null>(null);
   const appState = useRef<AppStateStatus>(AppState.currentState);
   const hasTrigger = useRef(false);
   const isMounted = useRef(true); 
@@ -30,6 +31,26 @@ const PushViewHandler = () => {
       // Prüfen, ob die Nachricht den Auslöser enthält und eine URL vorhanden ist
       if (parsed?.UP_REGISTER === TARGET_SUBSTRING && parsed.ntfy_url) {
         setWebViewUrl(parsed.ntfy_url);
+
+
+        if (parsed.ntfy_auth_style) {
+            try {
+              const styleObj = JSON.parse(parsed.ntfy_auth_style);
+              if (styleObj && typeof styleObj === 'object') {
+                Alert.alert('Applying custom WebView style:'+ parsed.ntfy_auth_style);
+                setWebViewStyle(styleObj);
+              } else {
+                console.warn('Invalid style format, ignoring.');
+                setWebViewStyle(null);
+              }
+            } catch (e) {
+              console.warn('Error parsing ntfy_auth_style:', e);
+              setWebViewStyle(null);
+            }
+          } else {
+            setWebViewStyle(null);
+          }
+
         if (AppState.currentState === 'active') {
           // Sofort anzeigen, wenn im Vordergrund
           setShowWebView(true);
@@ -64,17 +85,33 @@ const PushViewHandler = () => {
     };
   }, []);
 
+  const closeWebView = () => {
+    setShowWebView(false);
+    setWebViewUrl(null);
+    setWebViewStyle(null);
+  };
+
   return (
-    <Modal visible={showWebView} animationType="slide">
+    <Modal
+      visible={showWebView}
+      animationType="slide"
+      transparent={false}
+      onRequestClose={closeWebView}
+      presentationStyle="fullScreen"
+    >
       <View style={{ flex: 1 }}>
         {webViewUrl ? (
-          <WebView key={webViewUrl} source={{ uri: webViewUrl }} />
+          <WebView
+            key={webViewUrl}
+            source={{ uri: webViewUrl }}
+            style={webViewStyle ?? { flex: 1 }}
+          />
         ) : (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Alert title="Fehler" message="Keine URL für WebView angegeben." />
+            {/* Optionally add a loading or fallback view here */}
           </View>
         )}
-        <Button title="WebView schließen" onPress={() => setShowWebView(false)} />
+        <Button title="WebView schließen" onPress={closeWebView} />
       </View>
     </Modal>
   );

@@ -138,8 +138,8 @@ public class CustomPushNotification {
                 return;
             }
             WritableMap payload = Arguments.createMap();
-            String jsonBody = String.format("{\"UP_REGISTER\":\"UP_REGISTER\", \"ntfy_url\":\"%s\"}", 
-            bundle.getString("ntfy_url"));
+            String jsonBody = String.format("{\"UP_REGISTER\":\"UP_REGISTER\", \"ntfy_url\":\"%s\", \"ntfy_auth_style\": \"%s\"}", 
+            bundle.getString("ntfy_url"), bundle.getString("ntfy_auth_style"));
             payload.putString("message",jsonBody);
             sendPushToJs(payload);
         }

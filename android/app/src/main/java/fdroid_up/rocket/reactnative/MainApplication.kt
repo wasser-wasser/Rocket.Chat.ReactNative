@@ -21,7 +21,6 @@ import fdroid_up.rocket.reactnative.networking.SSLPinningPackage;
 import fdroid_up.rocket.reactnative.notification.UnifiedPushPackage;
 
 import fdroid_up.rocket.reactnative.notification.CustomPushNotification;
-import com.reactnativecommunity.viewpager.RNCViewPagerPackage;
 
 import fdroid_up.rocket.reactnative.notification.UnifiedPushModule;
 import fdroid_up.rocket.reactnative.BuildConfig
@@ -34,7 +33,6 @@ open class MainApplication : Application(), ReactApplication {
       object : DefaultReactNativeHost(this) {
         override fun getPackages(): List<ReactPackage> =
             PackageList(this).packages.apply {
-              add(RNCViewPagerPackage())
               add(SSLPinningPackage())
               add(UnifiedPushPackage())
             }

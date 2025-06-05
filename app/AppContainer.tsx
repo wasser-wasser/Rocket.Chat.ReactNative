@@ -20,8 +20,7 @@ import { setCurrentScreen } from './lib/methods/helpers/log';
 import { themes } from './lib/constants';
 import { emitter } from './lib/methods/helpers';
 
-// import { PushViewHandler } from './lib/notifications/PushViewHandler'
-import PushViewHandler from './lib/notifications/PushViewHandler'; // ✅ No curly braces
+import PushViewHandler from './lib/notifications/PushViewHandler';
 
 const createStackNavigator = createNativeStackNavigator;
 

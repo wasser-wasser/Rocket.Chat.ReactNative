@@ -15,7 +15,7 @@ interface IGenericAction extends Action {
 
 function* init() {
 	const serverVersion = yield* appSelector(state => state.server.version);
-	let deviceNotificationEnabled = false;
+	let deviceNotificationEnabled = true;
 	let defaultPushGateway = false;
 	let pushGatewayEnabled = false;
 	try {

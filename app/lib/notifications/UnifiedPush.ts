@@ -14,6 +14,7 @@ type UnifiedPushType = {
   registerApp: () => Promise<string>;
   registerAppWithId: (appId: string) => Promise<string>;
   sendRegistration: (url: string, userId: string, userToken: string) => Promise<string>;
+  removeRegistration: (url: string, userId: string, userToken: string) => Promise<string>;
   markJSReady: () => void;
   sendNotification: (appId: string) => void;
   // initialize: () => void;

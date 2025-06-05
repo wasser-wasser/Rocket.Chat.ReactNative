@@ -11,7 +11,7 @@ export interface ITroubleshootingNotification {
 }
 
 export const initialState: ITroubleshootingNotification = {
-	deviceNotificationEnabled: false,
+	deviceNotificationEnabled: true,
 	pushGatewayEnabled: false,
 	defaultPushGateway: false,
 	issuesWithNotifications: false,

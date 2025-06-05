@@ -117,7 +117,6 @@ android {
         versionCode VERSIONCODE as Integer
         versionName "4.59.0"
         vectorDrawables.useSupportLibrary = true
-        manifestPlaceholders = [BugsnagAPIKey: BugsnagAPIKey as String]
         missingDimensionStrategy "RNNotifications.reactNativeVersion", "reactNative60" // See note below!
         resValue "string", "rn_config_reader_custom_package", "fdroid_up.rocket.reactnative"
         testBuildType System.getProperty('testBuildType', 'debug')
@@ -171,7 +170,8 @@ dependencies {
         implementation jscFlavor
     }
 
-    implementation project(':@react-native-community_viewpager')
+    // implementation project(':@react-native-community_viewpager')
+    implementation project(':react-native-pager-view')
     implementation project(':watermelondb-jsi')
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
 
