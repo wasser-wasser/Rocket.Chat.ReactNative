@@ -1,6 +1,6 @@
 import { Rocketchat as RocketchatClient } from '@rocket.chat/sdk';
 import { sanitizedRaw } from '@nozbe/watermelondb/RawRecord';
-import { InteractionManager } from 'react-native';
+import { InteractionManager, Alert } from 'react-native';
 import { Q } from '@nozbe/watermelondb';
 
 import log from '../methods/helpers/log';
@@ -29,6 +29,9 @@ import {
 	setPresenceCap
 } from '../methods';
 import { compareServerVersion, isIOS, isSsl } from '../methods/helpers';
+import UnifiedPush from '../../lib/notifications/UnifiedPush'
+import UserPreferences from '../../lib/methods/userPreferences';
+import Navigation from '../../lib/navigation/appNavigation';
 
 interface IServices {
 	[index: string]: string | boolean;
@@ -281,6 +284,37 @@ function stopListener(listener: any): boolean {
 	return listener && listener.stop();
 }
 
+const handleUnifiedPushRegister = async (user: string, token: string, server: string) => {
+	let result = '';
+	try {
+		log(`rocket.chat registered UP fro TS handleUnifiedPushRegister (connect): ${server}`);
+		result = await UnifiedPush.registerApp(); 
+		UnifiedPush.markJSReady();
+		UserPreferences.setBool('UNIFIEDPUSH_REGISTEREED', true);
+		UnifiedPush.sendRegistration(server, user, token).then( (res)=>{
+			const json_resp = JSON.parse(res);
+			// Sollen wir hier die Authentifizierungs-Benutzeroberfläche mit UP auslösen?
+			if (json_resp.hasOwnProperty('authenticated') && json_resp['authenticated'] === false){
+				const url = `${server}/up-proxy/authenticate`
+				// UnifiedPush.sendNotification(url);
+			}
+		});
+	} catch (err) {
+		console.error('RegistrationFailed', err);
+		UserPreferences.setBool('UNIFIEDPUSH_REGISTEREED', false);
+	}
+	return result;
+};
+// const handleGetMessage = async () => {
+// 	try {
+// 		const message = await UnifiedPush.getCachedNotification();
+// 		console.log('Cached message UP from TS:', message);
+// 	} catch (err) {
+// 		console.error('Failed to get cached notification', err);
+// 	}
+// };
+
+
 async function login(credentials: ICredentials, isFromWebView = false): Promise<ILoggedUser | undefined> {
 	// RC 0.64.0
 	await sdk.current.login(credentials);
@@ -316,6 +350,8 @@ async function login(credentials: ICredentials, isFromWebView = false): Promise<
 			nickname: result.me.nickname,
 			requirePasswordChange: result.me.requirePasswordChange
 		};
+		//register push notification
+		handleUnifiedPushRegister(user.id, user.token, sdk.current?.client?.host)
 		return user;
 	}
 }

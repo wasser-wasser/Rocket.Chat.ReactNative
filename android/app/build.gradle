@@ -2,8 +2,32 @@ apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
-apply plugin: 'com.google.firebase.crashlytics'
-apply plugin: 'com.bugsnag.android.gradle'
+
+// configurations.all {
+//     resolutionStrategy {
+//         exclude group: 'com.google.crypto.tink'
+//     }
+// }
+
+// configurations.all {
+//     resolutionStrategy.eachDependency { details ->
+//         if (details.requested.group == 'com.google.crypto.tink') {
+//             throw new GradleException("Tink is not allowed in :app module.")
+//         }
+//     }
+// }
+
+
+configurations.all {
+    resolutionStrategy {
+        eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'com.google.crypto.tink' && details.requested.name == 'tink') {
+                details.useTarget group: 'com.google.crypto.tink', name: 'tink', version: '1.5.0' // dummy version
+                details.because 'Exclude com.google.crypto.tink:tink'
+            }
+        }
+    }
+}
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -79,23 +103,25 @@ project.ext.react = [
     // bundleAssetName: "app.bundle",
     iconFontNames: [ 'custom.ttf' ]
 ]
+// namespace "chat.rocket.reactnative"
+// resValue "string", "rn_config_reader_custom_package", "chat.rocket.reactnative"
+// applicationId APPLICATION_ID
 
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "chat.rocket.reactnative"
+    namespace "fdroid_up.rocket.reactnative"
     defaultConfig {
-        applicationId APPLICATION_ID
+        applicationId "fdroid_up.rocket.reactnative"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode VERSIONCODE as Integer
         versionName "4.61.0"
         vectorDrawables.useSupportLibrary = true
-        manifestPlaceholders = [BugsnagAPIKey: BugsnagAPIKey as String]
         missingDimensionStrategy "RNNotifications.reactNativeVersion", "reactNative60" // See note below!
-        resValue "string", "rn_config_reader_custom_package", "chat.rocket.reactnative"
+        resValue "string", "rn_config_reader_custom_package", "fdroid_up.rocket.reactnative"
         testBuildType System.getProperty('testBuildType', 'debug')
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
@@ -116,11 +142,6 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            firebaseCrashlytics {
-                nativeSymbolUploadEnabled true
-                strippedNativeLibsDir 'build/intermediates/stripped_native_libs/release/out/lib'
-                unstrippedNativeLibsDir 'build/intermediates/merged_native_libs/release/out/lib'
-            }
         }
     }
 
@@ -134,8 +155,20 @@ android {
             dimension = "app"
             buildConfigField "boolean", "IS_OFFICIAL", "false"
         }
+        fdroid {
+            dimension = "app"
+            buildConfigField "boolean", "IS_OFFICIAL", "false"
+        }
     }
 }
+afterEvaluate {
+    android.sourceSets.all {
+        java.srcDirs = java.srcDirs.findAll {
+            !it.absolutePath.contains("rncli")
+        }
+    }
+}
+
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
@@ -147,15 +180,29 @@ dependencies {
         implementation jscFlavor
     }
 
-    implementation project(':react-native-notifications')
-    implementation "com.google.firebase:firebase-messaging:23.3.1"
+    // implementation project(':@react-native-community_viewpager')
+    // implementation project(':react-native-pager-view')
     implementation project(':watermelondb-jsi')
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
 
+    implementation("org.bouncycastle:bcprov-jdk15on:1.70")
     implementation "com.google.code.gson:gson:2.8.9"
     implementation "com.tencent:mmkv-static:1.2.10"
     androidTestImplementation('com.wix:detox:+')
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.facebook.soloader:soloader:0.10.4'
+
+
+    // UnifiedPush enthält eine modifizierte Version von Tink, die mit allem anderen in Konflikt steht ... das müssen wir beheben
+    // Implementierung "org.unifiedpush.android:connector:3.0.9"
+    // --> verschoben nach // crypto-wrapper/build.gradle
+
+    
+    implementation ("org.unifiedpush.android:connector:3.0.9"){
+        exclude group: 'com.google.crypto.tink', module: 'tink'
+    }
+    implementation 'com.google.crypto.tink:tink-android:1.5.0'
 }
 
-apply plugin: 'com.google.gms.google-services'
+// apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+// apply plugin: 'com.google.gms.google-services'

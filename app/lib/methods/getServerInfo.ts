@@ -48,6 +48,7 @@ export async function getServerInfo(server: string): Promise<TServerInfoResult> 
 		const response = await fetch(`${server}/api/info`, {
 			...RocketChatSettings.customHeaders
 		});
+		console.log(`getServerInfo - ${server}/api/info `)
 		try {
 			const serverInfo: IApiServerInfo = await response.json();
 			if (!serverInfo?.success) {

@@ -81,3 +81,7 @@ e2e/e2e_account.js
 e2e/e2e_account.ts
 
 *.p8
+
+.expo
+# Ignore Gradle build output directory
+build

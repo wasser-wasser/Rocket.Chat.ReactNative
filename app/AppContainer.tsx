@@ -20,6 +20,8 @@ import { setCurrentScreen } from './lib/methods/helpers/log';
 import { themes } from './lib/constants';
 import { emitter } from './lib/methods/helpers';
 
+import PushViewHandler from './lib/notifications/PushViewHandler';
+
 const createStackNavigator = createNativeStackNavigator;
 
 // SetUsernameStack
@@ -64,6 +66,7 @@ const App = memo(({ root, isMasterDetail }: { root: string; isMasterDetail: bool
 				}
 				Navigation.routeNameRef.current = currentRouteName;
 			}}>
+			<PushViewHandler />
 			<Stack.Navigator screenOptions={{ headerShown: false, animation: 'none', navigationBarColor: themes[theme].surfaceLight }}>
 				{root === RootEnum.ROOT_LOADING || root === RootEnum.ROOT_LOADING_SHARE_EXTENSION ? (
 					<Stack.Screen name='AuthLoading' component={AuthLoadingView} />

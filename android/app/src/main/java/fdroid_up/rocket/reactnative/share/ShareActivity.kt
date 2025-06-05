@@ -1,4 +1,4 @@
-package chat.rocket.reactnative.share
+package fdroid_up.rocket.reactnative.share
 
 import android.content.Intent
 import android.net.Uri

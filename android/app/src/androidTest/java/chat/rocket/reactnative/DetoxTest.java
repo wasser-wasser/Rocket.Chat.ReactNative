@@ -1,5 +1,5 @@
 // Replace "com.example" here and below with your app's package name from the top of MainActivity.java
-package chat.rocket.reactnative;
+package fdroid_up.rocket.reactnative;
 
 import com.wix.detox.Detox;
 import com.wix.detox.config.DetoxConfig;
@@ -18,14 +18,14 @@ public class DetoxTest {
     @Rule
     // Replace 'MainActivity' with the value of android:name entry in 
     // <activity> in AndroidManifest.xml
-    public ActivityTestRule<chat.rocket.reactnative.MainActivity> mActivityRule = new ActivityTestRule<>(chat.rocket.reactnative.MainActivity.class, false, false);
+    public ActivityTestRule<fdroid_up.rocket.reactnative.MainActivity> mActivityRule = new ActivityTestRule<>(fdroid_up.rocket.reactnative.MainActivity.class, false, false);
 
     @Test
     public void runDetoxTests() {
         DetoxConfig detoxConfig = new DetoxConfig();
         detoxConfig.idlePolicyConfig.masterTimeoutSec = 90;
         detoxConfig.idlePolicyConfig.idleResourceTimeoutSec = 60;
-        detoxConfig.rnContextLoadTimeoutSec = (chat.rocket.reactnative.BuildConfig.DEBUG ? 180 : 60);
+        detoxConfig.rnContextLoadTimeoutSec = (fdroid_up.rocket.reactnative.BuildConfig.DEBUG ? 180 : 60);
 
         Detox.runTests(mActivityRule, detoxConfig);
     }

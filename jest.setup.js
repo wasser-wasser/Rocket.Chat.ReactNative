@@ -97,19 +97,19 @@ jest.mock('@react-navigation/native', () => {
 	};
 });
 
-jest.mock('react-native-notifications', () => ({
-	Notifications: {
-		getInitialNotification: jest.fn(() => Promise.resolve()),
-		registerRemoteNotifications: jest.fn(),
-		events: () => ({
-			registerRemoteNotificationsRegistered: jest.fn(),
-			registerRemoteNotificationsRegistrationFailed: jest.fn(),
-			registerNotificationReceivedForeground: jest.fn(),
-			registerNotificationReceivedBackground: jest.fn(),
-			registerNotificationOpened: jest.fn()
-		})
-	}
-}));
+// jest.mock('react-native-notifications', () => ({
+// 	Notifications: {
+// 		getInitialNotification: jest.fn(() => Promise.resolve()),
+// 		registerRemoteNotifications: jest.fn(),
+// 		events: () => ({
+// 			registerRemoteNotificationsRegistered: jest.fn(),
+// 			registerRemoteNotificationsRegistrationFailed: jest.fn(),
+// 			registerNotificationReceivedForeground: jest.fn(),
+// 			registerNotificationReceivedBackground: jest.fn(),
+// 			registerNotificationOpened: jest.fn()
+// 		})
+// 	}
+// }));
 
 jest.mock('@discord/bottom-sheet', () => {
 	const react = require('react-native');

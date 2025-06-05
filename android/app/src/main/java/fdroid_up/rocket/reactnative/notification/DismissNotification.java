@@ -1,4 +1,4 @@
-package chat.rocket.reactnative.notification;
+package fdroid_up.rocket.reactnative.notification;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
