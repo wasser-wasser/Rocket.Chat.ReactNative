@@ -12,7 +12,7 @@ import { useActionSheet } from '../../containers/ActionSheet';
 import ActionSheetContentWithInputAndSubmit from '../../containers/ActionSheet/ActionSheetContentWithInputAndSubmit';
 import { AvatarWithEdit } from '../../containers/Avatar';
 import Button from '../../containers/Button';
-import * as HeaderButton from '../../containers/HeaderButton';
+import * as HeaderButton from '../../containers/Header/components/HeaderButton';
 import KeyboardView from '../../containers/KeyboardView';
 import SafeAreaView from '../../containers/SafeAreaView';
 import StatusBar from '../../containers/StatusBar';
@@ -247,7 +247,13 @@ const ProfileView = ({ navigation }: IProfileViewProps): React.ReactElement => {
 			title: I18n.t('Profile')
 		};
 		if (!isMasterDetail) {
-			options.headerLeft = () => <HeaderButton.Drawer accessibilityLabel={I18n.t('Open_sidebar')} navigation={navigation} />;
+			options.headerLeft = () => (
+				<HeaderButton.Drawer
+					testID='profile-view-open-sidebar'
+					accessibilityLabel={I18n.t('Open_sidebar')}
+					navigation={navigation}
+				/>
+			);
 		}
 		options.headerRight = () => (
 			<HeaderButton.Preferences

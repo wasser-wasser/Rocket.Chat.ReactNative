@@ -11,16 +11,21 @@ import com.facebook.react.ReactPackage
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.load
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
+import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
 
 import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage;
-import com.facebook.react.bridge.JSIModulePackage;
 
 import expo.modules.ApplicationLifecycleDispatcher
+// <<<<<<< HEAD:android/app/src/main/java/chat/rocket/reactnative/MainApplication.kt
+// import chat.rocket.reactnative.networking.SSLPinningPackage;
+// import chat.rocket.reactnative.notification.CustomPushNotification;
+// =======
 import fdroid_up.rocket.reactnative.networking.SSLPinningPackage;
 import fdroid_up.rocket.reactnative.notification.UnifiedPushPackage;
-
 import fdroid_up.rocket.reactnative.notification.CustomPushNotification;
+// import com.reactnativecommunity.viewpager.RNCViewPagerPackage;
+
 
 import fdroid_up.rocket.reactnative.notification.UnifiedPushModule;
 import fdroid_up.rocket.reactnative.BuildConfig
@@ -33,13 +38,14 @@ open class MainApplication : Application(), ReactApplication {
       object : DefaultReactNativeHost(this) {
         override fun getPackages(): List<ReactPackage> =
             PackageList(this).packages.apply {
+              // add(RNCViewPagerPackage())
               add(SSLPinningPackage())
               add(UnifiedPushPackage())
             }
 
-        override fun getJSIModulePackage(): JSIModulePackage {
-            return WatermelonDBJSIPackage()
-        }
+        // override fun getJSIModulePackage(): JSIModulePackage {
+        //     return WatermelonDBJSIPackage()
+        // }
 
         override fun getJSMainModuleName(): String = "index"
         override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
@@ -52,7 +58,8 @@ open class MainApplication : Application(), ReactApplication {
 
   override fun onCreate() {
     super.onCreate()
-    SoLoader.init(this, false)
+    // SoLoader.init(this, false) // OLD reactnative
+     SoLoader.init(this, OpenSourceMergedSoMapping)
     // Bugsnag.start(this)
 
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
