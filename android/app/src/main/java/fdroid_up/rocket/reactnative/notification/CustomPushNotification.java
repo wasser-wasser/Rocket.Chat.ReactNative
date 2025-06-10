@@ -56,7 +56,6 @@ public class CustomPushNotification {
     public CustomPushNotification(Context context, Bundle notificationData) {
         Log.w(MODULE_NAME, "CustomPushNotification instantiate");
         this.mContext = context;
-        reactApplicationContext = new ReactApplicationContext(context);
         this.mNotificationData = notificationData;
         this.notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         this.handleNotification();

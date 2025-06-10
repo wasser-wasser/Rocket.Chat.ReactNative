@@ -291,14 +291,20 @@ const handleUnifiedPushRegister = async (user: string, token: string, server: st
 		result = await UnifiedPush.registerApp(); 
 		UnifiedPush.markJSReady();
 		UserPreferences.setBool('UNIFIEDPUSH_REGISTEREED', true);
-		UnifiedPush.sendRegistration(server, user, token).then( (res)=>{
-			const json_resp = JSON.parse(res);
-			// Sollen wir hier die Authentifizierungs-Benutzeroberfläche mit UP auslösen?
-			if (json_resp.hasOwnProperty('authenticated') && json_resp['authenticated'] === false){
-				const url = `${server}/up-proxy/authenticate`
-				// UnifiedPush.sendNotification(url);
-			}
-		});
+		await UnifiedPush.sendRegistration(server, user, token);
+		// UnifiedPush.sendRegistration(server, user, token).then( (res)=>{
+		// 	const json_resp = JSON.parse(res);
+		// 	// Sollen wir hier die Authentifizierungs-Benutzeroberfläche mit UP auslösen?
+		// 	if (json_resp.hasOwnProperty('authenticated')){
+		// 		if (json_resp['authenticated'] === false){
+		// 			UserPreferences.setBool('UNIFIEDPUSH_REGISTEREED', false);
+		// 		} else {
+		// 			UserPreferences.setBool('UNIFIEDPUSH_REGISTEREED', true);
+		// 		}
+		// 		// const url = `${server}/up-proxy/authenticate`
+		// 		// UnifiedPush.sendNotification(url);
+		// 	}
+		// });
 	} catch (err) {
 		console.error('RegistrationFailed', err);
 		UserPreferences.setBool('UNIFIEDPUSH_REGISTEREED', false);

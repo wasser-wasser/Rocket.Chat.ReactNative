@@ -1,0 +1,1 @@
+A fork of the official ROcket.Chat client utilizing UnifiedPush for notifications

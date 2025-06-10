@@ -180,9 +180,10 @@ public class UnifiedPushModule extends ReactContextBaseJavaModule {
                     UnifiedPush.register(
                         context,
                         INSTANCE_DEFAULT,
-                        "rocket.chat",
-                        "TODO: KEY vom Server holen"
+                        "fdroid_up.rocket.reactnative",
+                        null
                     );
+                    // "TODO: KEY vom Server holen"
                     
                     Log.w(MODULE_NAME, "Failed to use distributor");
                 }

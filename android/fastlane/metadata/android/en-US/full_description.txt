@@ -1,0 +1,60 @@
+This fork of Rocket Chat uses Unified Push and middleware with your Rocket Chat server so you can own the entire communication platform and keep everything private
+
+
+Rocket.Chat is a customizable open source communications platform for organizations with high standards of data protection. It enables real-time conversations between colleagues, with other companies or with your customers, across devices on web, desktop or mobile.
+The result is an increase in productivity and customer satisfaction rates. Everyday, tens of millions of users in over 150 countries and in organizations such as Deutsche Bahn, The US Navy and Credit Suisse trust Rocket.Chat to keep their communications completely private and secure.
+By opting for Rocket.Chat, users also benefit from free audio and video conferencing, guest access, screen and file sharing, LiveChat, LDAP Group Sync, two-factor authentication (2FA), E2E encryption, SSO, dozens of OAuth providers and unlimited users, guests, channels, messages, searches and files. Users can set up Rocket.Chat on cloud or by hosting their own servers on-premises.
+With thousands of contributors and stars on Github, Rocket.Chat has the world’s largest community of chat developers in the open source communication sector.
+When you choose Rocket.Chat, you join an ever-growing passionate community that constantly improves our platform with us :)
+
+KEY FEATURES:
+
+* Open Source Software
+
+* Hassle-free MIT license
+
+* BYOS (bring your own server)
+
+* Multiple Rooms
+
+* Direct Messages
+
+* Private & Public Channels/Groups
+
+* Desktop and Mobile Notifications
+
+* 100+ available integrations
+
+* Edit and Delete Sent Messages
+
+* Mentions
+
+* Avatars
+
+* Markdown
+
+* Emojis
+
+* Choose between 3 themes: Light, Dark, Black
+
+* Sort conversations alphabetically or group by activity, unread or favourites
+
+* Transcripts / History
+
+* File Upload / Sharing
+
+* I18n - [Internationalization with Lingohub]
+
+* Hubot Friendly - [Hubot Integration Project]
+
+* Media Embeds
+
+* Link Previews
+
+* LDAP Authentication
+
+* REST-full APIs
+
+* Remote Locations Video Monitoring
+
+* Native Cross-Platform Desktop Application
